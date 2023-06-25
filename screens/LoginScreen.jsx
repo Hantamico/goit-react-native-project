@@ -1,4 +1,5 @@
 import {
+    Alert,
     ImageBackground,
     Keyboard,
     KeyboardAvoidingView,
@@ -13,6 +14,8 @@ import { useFonts } from 'expo-font';
 import { useState } from "react";
 
 export default function LoginScreen() {
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
     const [keyboardShow, setKeyboardShow] = useState(false);
     const [focusedInputs, setFocusedInputs] = useState([]);
     const [showPassword, setShowPassword] = useState(false);
@@ -38,7 +41,15 @@ export default function LoginScreen() {
 
     function toggleShowPassword(){
     setShowPassword((prevShowPassword) => !prevShowPassword);
-  };
+    };
+    
+    function onSubmit() {
+        if (email.length === 0 && password.length === 0) {
+            Alert.alert("Введіть пошту та пароль");
+            return;
+        }
+        Alert.alert("Credentials", `${email} + ${password}`);
+    };
     
     if (!fontsLoaded) {
     return null;
@@ -53,27 +64,46 @@ export default function LoginScreen() {
                         <View style={{...styles.form, paddingBottom: keyboardShow ? 20:0}}>
                             <Text style={styles.title__text}>Увійти</Text>
 
-                            <TextInput style={[styles.input, focusedInputs[0] &&styles.inputFocused]} placeholder="Адреса електронної пошти" onBlur={()=> handleBlur(0)} onFocus={() => {
+                            <TextInput style={[styles.input, focusedInputs[0] && styles.inputFocused]}
+                                placeholder="Адреса електронної пошти"
+                                onChangeText={setEmail}
+                                value={email}
+                                onBlur={() => handleBlur(0)}
+                                onFocus={() => {
                                 handleFocus(0)
                                 setKeyboardShow(true)
-                            }} 
+                                }}
                             />
+
                             <View style={styles.input_container}>
-                            <TextInput style={[styles.input, focusedInputs[1] &&styles.inputFocused]} secureTextEntry={!showPassword} placeholder="Пароль" onBlur={()=> handleBlur(1)} onFocus={() => {
+                                <TextInput style={[styles.input, focusedInputs[1] && styles.inputFocused]}
+                                    secureTextEntry={!showPassword}
+                                    placeholder="Пароль"
+                                    onChangeText={setPassword}
+                                    value={password}
+                                    onBlur={() => handleBlur(1)}
+                                    onFocus={() => {
                                 handleFocus(1)
                                 setKeyboardShow(true)
-                            }} />
+                                    }} />
                                 <TouchableOpacity style={styles.showpass} onPress={toggleShowPassword}>
                                     <Text>{showPassword ? 'Скрити' : 'Показати'}</Text>
                                 </TouchableOpacity>
                             </View>
+
                         </View>
                     </TouchableWithoutFeedback>
                 </KeyboardAvoidingView>
+
                 <View style={styles.bottom_block}>
-                    <TouchableOpacity style={styles.button}><Text style={styles.button__text}>Зареєстуватися</Text></TouchableOpacity>
+
+                    <TouchableOpacity style={styles.button} onPress={onSubmit}>
+                        <Text style={styles.button__text}>Увійти</Text>
+                    </TouchableOpacity>
+
                     <Text style={styles.text}>Немає акаунту? Зареєструватися</Text>
                 </View>
+
             </ImageBackground>
         </View>
     );

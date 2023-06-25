@@ -9,6 +9,7 @@ import {
     TouchableOpacity,
     TouchableWithoutFeedback,
     Keyboard,
+    Alert,
 } from "react-native";
 import { useFonts } from 'expo-font';
 import { useState } from "react";
@@ -19,7 +20,10 @@ import { useState } from "react";
 export default function RegistrationScreen() {
     const [focusedInputs, setFocusedInputs] = useState([]);
     const [showPassword, setShowPassword] = useState(false);
-    const [keyboardShow, setKeyboardShow] = useState(false)
+    const [keyboardShow, setKeyboardShow] = useState(false);
+    const [login, setLogin] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [fontsLoaded] = useFonts({
     'Roboto-Regular': require('../fonts/Roboto/Roboto-Regular.ttf'),
     });
@@ -46,7 +50,15 @@ export default function RegistrationScreen() {
 
     function toggleShowPassword(){
     setShowPassword((prevShowPassword) => !prevShowPassword);
-  };
+    };
+    
+    function onSubmit() {
+        if (email.length === 0 && password.length === 0 && login.length ===0) {
+            Alert.alert("Заповніть всі поля");
+            return;
+        }
+        Alert.alert("Credentials", `login: ${login} + email: ${email} + password: ${password}`);
+    };
 
     return (
         <View style={styles.container}>
@@ -63,18 +75,34 @@ export default function RegistrationScreen() {
 
                             <Text style={styles.title__text}>Реєстрація</Text>
 
-                            <TextInput style={[styles.input, focusedInputs[0] &&styles.inputFocused]} placeholder="Логін" onBlur={()=> handleBlur(0)} onFocus={() => {
+                            <TextInput style={[styles.input, focusedInputs[0] && styles.inputFocused]}
+                                placeholder="Логін"
+                                onChangeText={setLogin}
+                                value={login}
+                                onBlur={() => handleBlur(0)}
+                                onFocus={() => {
                                 handleFocus(0)
                                 setKeyboardShow(true)
                             }} />
                             
-                            <TextInput style={[styles.input, focusedInputs[1] &&styles.inputFocused]} placeholder="Адреса електронної пошти" onBlur={()=> handleBlur(1)} onFocus={() => {
+                            <TextInput style={[styles.input, focusedInputs[1] && styles.inputFocused]}
+                                placeholder="Адреса електронної пошти"
+                                onChangeText={setEmail}
+                                value={email}
+                                onBlur={() => handleBlur(1)}
+                                onFocus={() => {
                                 handleFocus(1)
                                 setKeyboardShow(true)
                             }} />
                             
                             <View style={styles.input_container}>
-                            <TextInput style={[styles.input, focusedInputs[2] &&styles.inputFocused]} secureTextEntry={!showPassword} placeholder="Пароль" onBlur={()=> handleBlur(2)} onFocus={() => {
+                                <TextInput style={[styles.input, focusedInputs[2] && styles.inputFocused]}
+                                    secureTextEntry={!showPassword}
+                                    placeholder="Пароль"
+                                    onChangeText={setPassword}
+                                    value={password}
+                                    onBlur={() => handleBlur(2)}
+                                    onFocus={() => {
                                 handleFocus(2)
                                 setKeyboardShow(true)
                             }} />
@@ -87,7 +115,7 @@ export default function RegistrationScreen() {
                     </TouchableWithoutFeedback>
                 </KeyboardAvoidingView>
                 <View style={styles.bottom_block}>
-                    <TouchableOpacity style={styles.button}><Text style={styles.button__text}>Зареєстуватися</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={onSubmit} style={styles.button}><Text style={styles.button__text}>Зареєстуватися</Text></TouchableOpacity>
                             <Text style={styles.text}>Вже є акаунт? Увійти</Text>
                 </View>
             </ImageBackground>
