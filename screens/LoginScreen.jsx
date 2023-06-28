@@ -10,6 +10,7 @@ import {
     TouchableWithoutFeedback,
     View,
 } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { useState } from "react";
 
@@ -19,6 +20,7 @@ export default function LoginScreen() {
     const [keyboardShow, setKeyboardShow] = useState(false);
     const [focusedInputs, setFocusedInputs] = useState([]);
     const [showPassword, setShowPassword] = useState(false);
+    const navigation = useNavigation();
     const [fontsLoaded] = useFonts({
     'Roboto-Regular': require('../fonts/Roboto/Roboto-Regular.ttf'),
     });
@@ -48,12 +50,14 @@ export default function LoginScreen() {
             Alert.alert("Введіть пошту та пароль");
             return;
         }
-        Alert.alert("Credentials", `${email} + ${password}`);
+        navigation.navigate("Home");
     };
     
     if (!fontsLoaded) {
     return null;
     }
+
+    
 
     return (
         <View style={styles.container}>
@@ -101,7 +105,10 @@ export default function LoginScreen() {
                         <Text style={styles.button__text}>Увійти</Text>
                     </TouchableOpacity>
 
-                    <Text style={styles.text}>Немає акаунту? Зареєструватися</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate("Registration")}>
+                        <Text style={styles.text}>Немає акаунту? Зареєструватися</Text>
+                    </TouchableOpacity>
+
                 </View>
 
             </ImageBackground>

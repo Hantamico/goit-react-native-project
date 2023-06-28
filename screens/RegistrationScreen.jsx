@@ -11,6 +11,7 @@ import {
     Keyboard,
     Alert,
 } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { useState } from "react";
 
@@ -24,6 +25,7 @@ export default function RegistrationScreen() {
     const [login, setLogin] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigation = useNavigation();
     const [fontsLoaded] = useFonts({
     'Roboto-Regular': require('../fonts/Roboto/Roboto-Regular.ttf'),
     });
@@ -114,9 +116,15 @@ export default function RegistrationScreen() {
                         </View>
                     </TouchableWithoutFeedback>
                 </KeyboardAvoidingView>
+
                 <View style={styles.bottom_block}>
-                    <TouchableOpacity onPress={onSubmit} style={styles.button}><Text style={styles.button__text}>Зареєстуватися</Text></TouchableOpacity>
-                            <Text style={styles.text}>Вже є акаунт? Увійти</Text>
+                    <TouchableOpacity onPress={onSubmit} style={styles.button}>
+                        <Text style={styles.button__text}>Зареєстуватися</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                        <Text style={styles.text}>Вже є акаунт? Увійти</Text>
+                    </TouchableOpacity>
                 </View>
             </ImageBackground>
         </View>

@@ -1,9 +1,9 @@
 import { View } from "react-native";
 
-export default function PostsScreen() { 
+export default function ProfileScreen() {
     return (
         <View>
-            
+
         </View>
-    );
-};
+    )
+}
